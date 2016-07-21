@@ -25,10 +25,17 @@ ul li.active a:before {content:"►"; padding-right:.2em}
 	</ul>
 </div>
 <script>
+var linkers = [];
+
 $('ul li').each(function() {
-	$(this).removeClass('active');
-	if ($(this).find('a').prop('href').indexOf(location.hostname) >= 0) {
-		$(this).addClass('active');
+	var o = $(this);
+	o.removeClass('active');
+
+	var l = o.find('a').prop('href');
+	if (l.indexOf(location.hostname) >= 0) {
+		o.addClass('active');
+	} else {
+		linkers.push(l.replace(/https?:\/\/([^\/]+).*/g, '$1'));
 	}
 });
 
@@ -37,7 +44,9 @@ $('ul li').each(function() {
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-ga('create', 'UA-246655-6', 'auto');
+ga('create', 'UA-246655-6', 'auto', {'allowLinker':true});
+ga('require', 'linker');
+ga('linker:autoLink', linkers);
 ga('send', 'pageview');
 </script>
 </body>
